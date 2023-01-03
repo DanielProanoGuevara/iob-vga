@@ -1,29 +1,29 @@
-ifeq ($(filter GPIO, $(HW_MODULES)),)
+ifeq ($(filter VGA, $(HW_MODULES)),)
 
-include $(GPIO_DIR)/config.mk
+include $(VGA_DIR)/config.mk
 
 #add itself to HW_MODULES list
-HW_MODULES+=GPIO
+HW_MODULES+=VGA
 
 
-GPIO_INC_DIR:=$(GPIO_HW_DIR)/include
-GPIO_SRC_DIR:=$(GPIO_HW_DIR)/src
+VGA_INC_DIR:=$(VGA_HW_DIR)/include
+VGA_SRC_DIR:=$(VGA_HW_DIR)/src
 
 
 #include files
-VHDR+=$(wildcard $(GPIO_INC_DIR)/*.vh)
-VHDR+=iob_gpio_swreg_gen.vh iob_gpio_swreg_def.vh
+VHDR+=$(wildcard $(VGA_INC_DIR)/*.vh)
+VHDR+=iob_vga_swreg_gen.vh iob_vga_swreg_def.vh
 VHDR+=$(LIB_DIR)/hardware/include/iob_lib.vh $(LIB_DIR)/hardware/include/iob_s_if.vh $(LIB_DIR)/hardware/include/iob_gen_if.vh
 
 #hardware include dirs
-INCLUDE+=$(incdir). $(incdir)$(GPIO_INC_DIR) $(incdir)$(LIB_DIR)/hardware/include
+INCLUDE+=$(incdir). $(incdir)$(VGA_INC_DIR) $(incdir)$(LIB_DIR)/hardware/include
 
 #sources
-VSRC+=$(wildcard $(GPIO_SRC_DIR)/*.v)
+VSRC+=$(wildcard $(VGA_SRC_DIR)/*.v)
 
-gpio-hw-clean:
-	@rm -rf $(GPIO_HW_DIR)/fpga/vivado/XCKU $(GPIO_HW_DIR)/fpga/quartus/CYCLONEV-GT
+vga-hw-clean:
+	@rm -rf $(VGA_HW_DIR)/fpga/vivado/XCKU $(VGA_HW_DIR)/fpga/quartus/CYCLONEV-GT
 
-.PHONY: gpio-hw-clean
+.PHONY: vga-hw-clean
 
 endif

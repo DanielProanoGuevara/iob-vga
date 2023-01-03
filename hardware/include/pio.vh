@@ -1,4 +1,9 @@
-   // GPIO
-   input [`GPIO_INPUT_W-1:0] gpio_input,
-   output [`GPIO_OUTPUT_W-1:0] gpio_output,
-   output [`GPIO_OUTPUT_W-1:0] gpio_output_enable,
+   // VGA
+      input clk,
+      input  [15:0] pixel,
+      output v_sync,
+      output h_sync,
+      output [3:0] Red,
+      output [3:0] Green,
+      output [3:0] Blue,
+      output reg[31:0] pixel_ADDR,
