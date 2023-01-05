@@ -8,7 +8,7 @@
 //`include "vertical_counter.v"
 //`include "horizontal_counter.v"
 
-module vga(
+module iob_vga(
 	   input clk,
 	   input  [15:0] pixel,
 	   output v_sync,

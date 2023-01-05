@@ -4,9 +4,9 @@
 `timescale 1ns / 1ps
 
 module horizontal_counter(
-       input 		 clk_25MHz,
-       output  	 enable_V_counter = 0,
-       output  [15:0] H_Count_Value = 0
+       input 		clk_25MHz,
+       output reg 	enable_V_counter = 0,
+       output reg [15:0] H_Count_Value = 0
 			  );
 
    always@(posedge clk_25MHz) begin
