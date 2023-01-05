@@ -1,4 +1,4 @@
-GPIO_DIR:=../../..
+VGA_DIR:=../../..
 
 incdir:=-I
 defmacro:=-D

@@ -9,6 +9,9 @@ HW_MODULES+=VGA
 VGA_INC_DIR:=$(VGA_HW_DIR)/include
 VGA_SRC_DIR:=$(VGA_HW_DIR)/src
 
+#import module
+include $(LIB_DIR)/hardware/iob_reg/hardware.mk
+
 
 #include files
 VHDR+=$(wildcard $(VGA_INC_DIR)/*.vh)
@@ -22,7 +25,7 @@ INCLUDE+=$(incdir). $(incdir)$(VGA_INC_DIR) $(incdir)$(LIB_DIR)/hardware/include
 VSRC+=$(wildcard $(VGA_SRC_DIR)/*.v)
 
 vga-hw-clean:
-	@rm -rf $(VGA_HW_DIR)/fpga/vivado/XCKU $(VGA_HW_DIR)/fpga/quartus/CYCLONEV-GT
+	@rm -f *.v *.vh
 
 .PHONY: vga-hw-clean
 

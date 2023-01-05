@@ -6,7 +6,7 @@
 module vertical_counter(
        input 		 clk_25MHz,
        input 		 enable_V_counter,
-       output reg [15:0] V_Count_Value = 0
+       output  [15:0] V_Count_Value = 0
 			  );
 
    always@(posedge clk_25MHz) begin

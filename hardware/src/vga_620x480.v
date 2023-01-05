@@ -4,9 +4,9 @@
 
 `timescale 1ns / 1ps
 
-`include "clock_divider.v"
-`include "vertical_counter.v"
-`include "horizontal_counter.v"
+//`include "clock_divider.v"
+//`include "vertical_counter.v"
+//`include "horizontal_counter.v"
 
 module vga(
 	   input clk,
@@ -16,14 +16,14 @@ module vga(
 	   output [3:0] Red,
 	   output [3:0] Green,
 	   output [3:0] Blue,
-	   output reg[31:0] pixel_ADDR
+	   output reg [31:0] pixel_ADDR
 	   );
 
    wire 		clk_25M;
    wire 		enable_V_counter;
    wire [15:0] 		H_count_value;
    wire [15:0] 		V_count_value;
-   reg [31:0] 		ADDR_count = 32'h00000000;
+   reg [31:0] 		ADDR_count = 32'b0;
    
    
    // Module Instantiation
@@ -44,7 +44,7 @@ module vga(
 	 ADDR_count <= ADDR_count + 1;
       end
       if (ADDR_count == 297599) begin
-	 ADDR_count <= 32'h00000000;
+	 ADDR_count <= 32'b0;
       end
       pixel_ADDR <= ADDR_count << 4;
    end
