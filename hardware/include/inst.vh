@@ -5,6 +5,7 @@
    iob_vga vga
      (
       .clk        (clk),
+      .rst        (rst),
       .pixel      (pixel),
       .v_sync     (v_sync),
       .h_sync     (h_sync),

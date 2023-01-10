@@ -8,34 +8,30 @@
 
 // Counter based
 module clock_divider(
-       input wire clk, // 100 MHz
-       output reg clk_div = 0 // 25 MHz
+		     input clk, // 100 MHz
+		     input rst, // Reset value
+		     output reg en// Counter value
 		     );
 
+   reg [3:0]  counter_value;
    localparam div_value = 2;
-   // division_value = 100MHZ/(2*desired Frequency)
-
-   integer    counter_value = 0;
-
+   // division_value = 100MHZ/(2*desired Frequency) counter
+   
    // counter
    always@ (posedge clk) begin
-      if (counter_value == div_value)
-	counter_value <= 0;
-      else
-	counter_value <= counter_value + 1;
-      
+      if (rst) begin
+	 counter_value <= 0;
+         en <= 0;
+      end
+      else begin      
+	 if (counter_value == div_value) begin
+	    counter_value <= 0;
+	    en <= 1;
+	  end
+	 else begin
+	    counter_value <= counter_value + 1;
+	    en <= 0;
+	 end
+      end 
    end
-
-   // divide clock
-   always@ (posedge clk) begin
-      if (counter_value == div_value)
-	clk_div <= ~clk_div;
-      else
-	clk_div <= clk_div;
-      
-   end
-   
-   
-
-
 endmodule // clock_divider

@@ -4,19 +4,29 @@
 `timescale 1ns / 1ps
 
 module vertical_counter(
-       input 		 clk_25MHz,
+       input 		 clk,
+       input 		 en,
+       input 		 rst, 
        input 		 enable_V_counter,
        output reg [15:0] V_Count_Value = 0
 			  );
+   localparam V_T_sync = 524;
 
-   always@(posedge clk_25MHz) begin
-
-      if (enable_V_counter == 1'b1) begin
-	 
-	 if (V_Count_Value < 524) //VGA standard
-	   V_Count_Value <= V_Count_Value + 1;
-	 else 
-	   V_Count_Value <= 0; // Reset H counter
+   always@(posedge clk) begin
+      if (rst) begin
+	 V_Count_Value <= 0;
+      end
+      else begin
+	 if (en) begin
+	    if (enable_V_counter) begin
+	       if (V_Count_Value < V_T_sync -1) begin // VGA standard
+		  V_Count_Value = V_Count_Value + 1;
+	       end
+	       else begin
+		  V_Count_Value <= 0; // Reset vertical counter
+	       end
+	    end
+	 end
       end
    end
 endmodule // vertical_counter
