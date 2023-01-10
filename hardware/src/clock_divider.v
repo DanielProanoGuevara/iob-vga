@@ -12,8 +12,8 @@ module clock_divider(
        output reg clk_div = 0 // 25 MHz
 		     );
 
-   localparam div_value = 1;
-   // division_value = 100MHZ/(2*desired Frequency) -1
+   localparam div_value = 2;
+   // division_value = 100MHZ/(2*desired Frequency)
 
    integer    counter_value = 0;
 
