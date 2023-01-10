@@ -32,8 +32,8 @@ module iob_vga(
    vertical_counter VGA_V_count (clk_25M ,enable_V_counter, V_count_value);
 
    // Outputs
-   assign h_sync = (H_count_value < 96 || (H_count_value < 784 && H_count_value > 143)) ? 1'b1:1'b0;
-   assign v_sync = (V_count_value < 2 || (V_count_value < 515 && V_count_value > 34)) ? 1'b1:1'b0;
+	assign h_sync = (H_count_value < 96) ? 1'b0:1'b1;
+	assign v_sync = (V_count_value < 2 ) ? 1'b0:1'b1;
    // Colors
    assign Red = (H_count_value < 784 && H_count_value > 143 && V_count_value < 515 && V_count_value > 34) ? pixel[11:8]:4'h0;
    assign Green = (H_count_value < 784 && H_count_value > 143 && V_count_value < 515 && V_count_value > 34) ? pixel[7:4]:4'h0;
