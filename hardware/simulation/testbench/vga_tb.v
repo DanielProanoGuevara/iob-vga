@@ -11,6 +11,7 @@ module vga_tb;
 
    // Inputs
    reg 			 	clk;
+   reg 			 	rst;
    reg [15:0]  		pixel; 
       
    // Outputs
@@ -24,15 +25,25 @@ module vga_tb;
 				
    initial begin
 
+`ifdef VCD
+      $dumpfile("uut.vcd");
+      $dumpvars;
+`endif
+
       // Initialize Inputs
       clk = 1;
+      rst = 1;
+      
       pixel = 32'hFFFF;
 	  	  
-      $display("VGA init"); 
+      $display("VGA init");
+
+      // deassert hard reset
+      #100 @(posedge clk) #1 rst = 0;
 
       #clk_per;      
       $display("Test completed successfully.");
-      #(10000000*clk_per) $finish;
+      #(2000000*clk_per) $finish;
 
    end // initial begin
 
@@ -44,16 +55,17 @@ module vga_tb;
    end
 
    // Instantiate the Unit Under Test (UUT)
-   vga uut
+   iob_vga uut
      (
       .clk(clk),
-	  .pixel(pixel),
-	  .v_sync(v_sync),
-	  .h_sync(h_sync),
-	  .Red(Red),
-	  .Green(Green),
-	  .Blue(Blue),
-	  .pixel_ADDR(pixel_ADDR)          
+      .rst(rst),
+      .pixel(pixel),
+      .v_sync(v_sync),
+      .h_sync(h_sync),
+      .Red(Red),
+      .Green(Green),
+      .Blue(Blue),
+      .pixel_ADDR(pixel_ADDR)          
       );
 
    // system clock
