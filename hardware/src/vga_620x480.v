@@ -68,35 +68,39 @@ module iob_vga(
    // Outputs
    assign h_sync = (H_count_value < H_Sync_Pulse)  ? 1'b0:1'b1;
    assign v_sync = (V_count_value < V_Sync_Pulse)  ? 1'b0:1'b1;
-   // Colors
-   //assign Red = 4'hF;
-   //assign Green = 4'hF;
-   //assign Blue = 4'hF;
-
-   
+   // Colors 
    assign Red = ( H_count_value > (H_Sync_Pulse + H_Back_Porch -1) && 
                   H_count_value < (H_Sync_Pulse + H_Back_Porch + H_Visible_Area) &&
                   V_count_value > (V_Sync_Pulse + V_Back_Porch -1) &&
-                  V_count_value < (H_Sync_Pulse + V_Back_Porch + V_Visible_Area)) ? 4'h8:4'h0;
+                  V_count_value < (H_Sync_Pulse + V_Back_Porch + V_Visible_Area)) ? pixel[11:8]:4'h0;
    assign Green = (H_count_value > (H_Sync_Pulse + H_Back_Porch -1) && 
                   H_count_value < (H_Sync_Pulse + H_Back_Porch + H_Visible_Area) &&
                   V_count_value > (V_Sync_Pulse + V_Back_Porch -1) &&
-                  V_count_value < (H_Sync_Pulse + V_Back_Porch + V_Visible_Area)) ? 4'h8:4'h0;
+                  V_count_value < (H_Sync_Pulse + V_Back_Porch + V_Visible_Area)) ? pixel[7:4]:4'h0;
    assign Blue = (H_count_value > (H_Sync_Pulse + H_Back_Porch -1) && 
                   H_count_value < (H_Sync_Pulse + H_Back_Porch + H_Visible_Area) &&
                   V_count_value > (V_Sync_Pulse + V_Back_Porch -1) &&
-                  V_count_value < (H_Sync_Pulse + V_Back_Porch + V_Visible_Area)) ? 4'h8:4'h0;
-   /*
-   // Address generator
-   always@(posedge clk_25M) begin
-      if (H_count_value < 784 && H_count_value > 143 && V_count_value < 515 && V_count_value > 34) begin
-	 ADDR_count <= ADDR_count + 1;
-      end
-      if (ADDR_count == 297599) begin
-	 ADDR_count <= 32'b0;
-      end
-      pixel_ADDR <= ADDR_count << 4;
-   end
-    */
+                  V_count_value < (H_Sync_Pulse + V_Back_Porch + V_Visible_Area)) ? pixel[3:0]:4'h0;
    
+   // Address generator
+   always @(posedge clk) begin
+      if (rst) begin
+         ADDR_count <= 32'b0;
+         pixel_ADDR <= 32'b0;
+      end
+      else begin
+         if (en) begin
+            if (H_count_value > (H_Sync_Pulse + H_Back_Porch -1) && 
+            H_count_value < (H_Sync_Pulse + H_Back_Porch + H_Visible_Area) &&
+            V_count_value > (V_Sync_Pulse + V_Back_Porch -1) &&
+            V_count_value < (H_Sync_Pulse + V_Back_Porch + V_Visible_Area)) begin
+               ADDR_count <= ADDR_count + 1;
+            end
+            if (ADDR_count == (H_Visible_Area * V_Visible_Area) -1) begin
+               ADDR_count <= 32'b0;
+            end
+            pixel_ADDR <= ADDR_count << 4;
+         end
+      end
+   end 
 endmodule // vga
