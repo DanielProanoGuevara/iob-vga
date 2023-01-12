@@ -7,15 +7,15 @@
 `timescale 1ns / 1ps
 
 // Counter based
-module clock_divider(
+module clock_divider #(
+	parameter div_value = 2 // division_value = 100MHZ/(2*desired Frequency) counter
+)(
 		     input clk, // 100 MHz
 		     input rst, // Reset value
 		     output reg en// Counter value
 		     );
 
    reg [3:0]  counter_value;
-   localparam div_value = 2;
-   // division_value = 100MHZ/(2*desired Frequency) counter
    
    // counter
    always@ (posedge clk) begin

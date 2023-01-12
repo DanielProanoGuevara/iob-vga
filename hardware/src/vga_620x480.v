@@ -25,22 +25,39 @@ module iob_vga(
    wire [15:0] 		H_count_value;
    wire [15:0] 		V_count_value;
    reg [31:0] 		ADDR_count = 32'b0;
+   localparam H_Sync_Pulse = 96;
+   localparam V_Sync_Pulse = 2;
+   localparam H_Front_Porch = 16;
+   localparam V_Front_Porch = 10;
+   localparam H_Back_Porch = 48;
+   localparam V_Back_Porch = 33;
+   localparam H_Visible_Area = 640;
+   localparam V_Visible_Area = 480;
    
    
    // Module Instantiation
-   clock_divider VGA_clk_gen(
+   clock_divider  
+               #(.div_value (3))
+               VGA_clk_gen
+               (
 			     .clk (clk),
 			     .rst (rst),
 			     .en (en)
 			     );
-   horizontal_counter VGA_H_count(
+   horizontal_counter  
+               #(.H_Frame (800))
+               VGA_H_count
+               (
 				  .clk (clk),
 				  .rst (rst),
 				  .en (en),
 				  .enable_V_counter (enable_V_counter),
 				  .H_Count_Value (H_count_value)
 				  );
-   vertical_counter VGA_V_count(
+   vertical_counter  
+            #(.V_Frame (525))
+            VGA_V_count
+            (
 				.clk (clk),
 				.rst (rst),
 				.en (en),
@@ -49,17 +66,27 @@ module iob_vga(
 				);
 
    // Outputs
-   assign h_sync = (H_count_value >= 656 && H_count_value <= 751); // ? 1'b1:1'b0;
-   assign v_sync = (V_count_value >= 490 && V_count_value <= 491); // ? 1'b1:1'b0;
+   assign h_sync = (H_count_value < H_Sync_Pulse)  ? 1'b0:1'b1;
+   assign v_sync = (V_count_value < V_Sync_Pulse)  ? 1'b0:1'b1;
    // Colors
-   assign Red = 4'hF;
-   assign Green = 4'hF;
-   assign Blue = 4'hF;
+   //assign Red = 4'hF;
+   //assign Green = 4'hF;
+   //assign Blue = 4'hF;
 
+   
+   assign Red = ( H_count_value > (H_Sync_Pulse + H_Back_Porch -1) && 
+                  H_count_value < (H_Sync_Pulse + H_Back_Porch + H_Visible_Area) &&
+                  V_count_value > (V_Sync_Pulse + V_Back_Porch -1) &&
+                  V_count_value < (H_Sync_Pulse + V_Back_Porch + V_Visible_Area)) ? 4'h8:4'h0;
+   assign Green = (H_count_value > (H_Sync_Pulse + H_Back_Porch -1) && 
+                  H_count_value < (H_Sync_Pulse + H_Back_Porch + H_Visible_Area) &&
+                  V_count_value > (V_Sync_Pulse + V_Back_Porch -1) &&
+                  V_count_value < (H_Sync_Pulse + V_Back_Porch + V_Visible_Area)) ? 4'h8:4'h0;
+   assign Blue = (H_count_value > (H_Sync_Pulse + H_Back_Porch -1) && 
+                  H_count_value < (H_Sync_Pulse + H_Back_Porch + H_Visible_Area) &&
+                  V_count_value > (V_Sync_Pulse + V_Back_Porch -1) &&
+                  V_count_value < (H_Sync_Pulse + V_Back_Porch + V_Visible_Area)) ? 4'h8:4'h0;
    /*
-   assign Red = (H_count_value < 784 && H_count_value > 143 && V_count_value < 515 && V_count_value > 34) ? pixel[11:8]:4'h0;
-   assign Green = (H_count_value < 784 && H_count_value > 143 && V_count_value < 515 && V_count_value > 34) ? pixel[7:4]:4'h0;
-   assign Blue = (H_count_value < 784 && H_count_value > 143 && V_count_value < 515 && V_count_value > 34) ? pixel[3:0]:4'h0;
    // Address generator
    always@(posedge clk_25M) begin
       if (H_count_value < 784 && H_count_value > 143 && V_count_value < 515 && V_count_value > 34) begin

@@ -3,14 +3,15 @@
 
 `timescale 1ns / 1ps
 
-module vertical_counter(
+module vertical_counter #(
+   parameter V_Frame = 524 // Vertical Sync time
+)(
        input 		 clk,
        input 		 en,
        input 		 rst, 
        input 		 enable_V_counter,
        output reg [15:0] V_Count_Value = 0
 			  );
-   localparam V_T_sync = 524;
 
    always@(posedge clk) begin
       if (rst) begin
@@ -19,7 +20,7 @@ module vertical_counter(
       else begin
 	 if (en) begin
 	    if (enable_V_counter) begin
-	       if (V_Count_Value < V_T_sync -1) begin // VGA standard
+	       if (V_Count_Value < V_Frame -1) begin // VGA standard
 		  V_Count_Value = V_Count_Value + 1;
 	       end
 	       else begin

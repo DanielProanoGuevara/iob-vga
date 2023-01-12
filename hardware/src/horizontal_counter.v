@@ -3,16 +3,16 @@
 
 `timescale 1ns / 1ps
 
-module horizontal_counter(
+module horizontal_counter#(
+	parameter H_Frame = 800 //Horizontal Sync time
+)(
        input 		 clk,
        input 		 en,
        input 		 rst,
        output reg 	 enable_V_counter = 0,
        output reg [15:0] H_Count_Value = 0
 			  );
-
-   localparam H_T_sync = 800;
-   
+ 
    always@(posedge clk) begin
       if (rst) begin
 	 enable_V_counter <= 0;
@@ -20,7 +20,7 @@ module horizontal_counter(
       end
       else begin
 	 if (en) begin
-	    if (H_Count_Value < H_T_sync -1) begin // VGA standard
+	    if (H_Count_Value < H_Frame -1) begin // VGA standard
 	       H_Count_Value <= H_Count_Value + 1;
 	       enable_V_counter <= 0;
 	    end
