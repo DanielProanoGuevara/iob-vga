@@ -8,7 +8,7 @@
 
 // Counter based
 module clock_divider #(
-	parameter div_value = 2 // division_value = 100MHZ/(2*desired Frequency) counter
+	parameter div_value = 2 // Pulses to be counted before generating the enable signal
 )(
 		     input clk, // 100 MHz
 		     input rst, // Reset value
