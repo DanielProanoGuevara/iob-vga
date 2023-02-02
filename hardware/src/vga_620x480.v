@@ -25,7 +25,7 @@ module iob_vga(
    wire 		enable_V_counter;
    wire [15:0] 		H_count_value;
    wire [15:0] 		V_count_value;
-   reg [31:0] 		ADDR_count = 32'b0;
+  
    localparam H_Sync_Pulse = 96;
    localparam V_Sync_Pulse = 2;
    localparam H_Front_Porch = 16;
@@ -82,7 +82,7 @@ module iob_vga(
                   H_count_value < (H_Sync_Pulse + H_Back_Porch + H_Visible_Area) &&
                   V_count_value > (V_Sync_Pulse + V_Back_Porch -1) &&
                   V_count_value < (H_Sync_Pulse + V_Back_Porch + V_Visible_Area)) ? rgb[3:0]:4'h0;
-
+   // Pixel coordinate generator
    assign pixel_x = H_count_value - H_Sync_Pulse - H_Back_Porch + 1;
    assign pixel_y = V_count_value - V_Sync_Pulse - V_Back_Porch + 1;
    
